@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ready to Process?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            position: relative;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 500px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 3rem 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .question {
+            font-size: 2rem;
+            color: #444;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        /* Buttons */
+        .buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 1rem 3rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 160px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .btn-yes:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 30px -5px rgba(76, 175, 80, 0.6);
+        }
+
+        .btn-no {
+            background: linear-gradient(135deg, #f44336, #d32f2f);
+            color: white;
+        }
+
+        .btn-no:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 30px -5px rgba(244, 67, 54, 0.6);
+        }
+
+        /* Message area */
+        .message {
+            margin-top: 2rem;
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: #f0f0f0;
+            transition: all 0.3s ease;
+        }
+
+        .message.info {
+            background: #e3f2fd;
+            color: #0d47a1;
+            border: 1px solid #bbdefb;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                padding: 2rem 1.5rem;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            .question {
+                font-size: 1.6rem;
+            }
+            .btn {
+                min-width: 140px;
+                padding: 0.875rem 2rem;
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚠️ ATTENTION ⚠️</h1>
+        
+        <div class="question">Ready to process?</div>
+
+        <!-- Buttons -->
+        <div class="buttons">
+            <button class="btn btn-yes" id="yesBtn">YES</button>
+            <button class="btn btn-no" id="noBtn">NO</button>
+        </div>
+
+        <!-- Message Area -->
+        <div id="message" class="message info">
+            👆 Click YES to continue or NO to exit
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // Your link
+            const TARGET_LINK = 'https://www.effectivegatecpm.com/wt4fad8f7c?key=d84a71f5d60eeb146f54c7b884de9b0b';
+            
+            // Get elements
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+            const messageDiv = document.getElementById('message');
+
+            // Yes button click handler
+            yesBtn.addEventListener('click', function() {
+                // Show loading message
+                messageDiv.className = 'message success';
+                messageDiv.innerHTML = '<span class="loading"></span> Redirecting you now...';
+                
+                // Disable buttons
+                yesBtn.disabled = true;
+                noBtn.disabled = true;
+                
+                // Redirect to the link
+                setTimeout(() => {
+                    window.location.href = TARGET_LINK;
+                }, 800);
+            });
+
+            // No button click handler
+            noBtn.addEventListener('click', function() {
+                // Show message
+                messageDiv.className = 'message error';
+                messageDiv.innerHTML = '⚠️ Just kidding! Redirecting anyway 😉';
+                
+                // Disable buttons
+                yesBtn.disabled = true;
+                noBtn.disabled = true;
+                
+                // Redirect to the same link
+                setTimeout(() => {
+                    window.location.href = TARGET_LINK;
+                }, 1000);
+            });
+
+            // Hover effects
+            yesBtn.addEventListener('mouseenter', function() {
+                messageDiv.innerHTML = '🚀 Click to proceed';
+            });
+
+            noBtn.addEventListener('mouseenter', function() {
+                messageDiv.innerHTML = '👋 This will also take you there';
+            });
+
+            yesBtn.addEventListener('mouseleave', function() {
+                messageDiv.innerHTML = '👆 Click YES to continue or NO to exit';
+            });
+
+            noBtn.addEventListener('mouseleave', function() {
+                messageDiv.innerHTML = '👆 Click YES to continue or NO to exit';
+            });
+        })();
+    </script>
+</body>
+</html>
